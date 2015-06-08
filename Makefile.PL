@@ -9,6 +9,7 @@ all_from 'lib/Code4Health/AppKitX/Users.pm';
 
 requires 'Moose';
 requires 'namespace::autoclean';
+requires 'OpusVL::AppKit';
 
 build_requires 'Catalyst::Runtime' => '5.80015';
 build_requires 'Test::WWW::Mechanize::Catalyst';
