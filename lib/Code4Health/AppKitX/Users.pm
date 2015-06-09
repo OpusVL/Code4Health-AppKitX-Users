@@ -19,6 +19,11 @@ after 'setup_components' => sub {
         component => 'Code4Health::AppKitX::Users::Controller::Users',
         as        => 'Controller::Modules::Users'
     );
+    CatalystX::InjectComponent->inject(
+        into      => $class,
+        component => 'Code4Health::AppKitX::Users::Model::Users',
+        as        => 'Model::Users'
+    );
 };
 
 1;

@@ -10,6 +10,8 @@ all_from 'lib/Code4Health/AppKitX/Users.pm';
 requires 'Moose';
 requires 'namespace::autoclean';
 requires 'OpusVL::AppKit';
+requires 'Catalyst::Model::DBIC::Schema';
+requires 'Code4Health::DB';
 
 build_requires 'Catalyst::Runtime' => '5.80015';
 build_requires 'Test::WWW::Mechanize::Catalyst';
