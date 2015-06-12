@@ -1,0 +1,2 @@
+[% USE JSON %]
+callback([% data.json | none %]);
