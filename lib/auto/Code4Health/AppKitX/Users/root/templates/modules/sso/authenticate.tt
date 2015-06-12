@@ -1,2 +1,2 @@
 [% USE JSON %]
-callback([% data.json | none %]);
+[% callback_func %]([% data.json | none %]);
