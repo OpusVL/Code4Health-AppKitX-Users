@@ -33,6 +33,7 @@ sub authenticate
         # FIXME: need somewhere to get the photourl from.
         if($timestamp)
         {
+            # FIXME: add roles
             $c->stash->{data} = {
                 uniqueid => $c->user->id,
                 email => $c->user->email,
