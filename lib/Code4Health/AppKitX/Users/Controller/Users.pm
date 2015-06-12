@@ -1,6 +1,7 @@
 package Code4Health::AppKitX::Users::Controller::Users;
 
 use Moose;
+use Code4Health::AppKitX::Users::HTML::FormHandler::RegistrationForm;
 use namespace::autoclean;
 BEGIN { extends 'Catalyst::Controller'; };
 with 'OpusVL::AppKit::RolesFor::Controller::GUI';
@@ -15,14 +16,48 @@ __PACKAGE__->config
     # appkit_shared_module        => 'ExtensionA',
 );
 
-# sub home
-#     :Path
-#     :Args(0)
-#     :NavigationHome
-#     :AppKitFeature('Extension A')
-# {
-#     my ($self, $c) = @_;
-# }
+has 'registration_form' => (
+    is => 'ro',
+    isa => 'Object',
+    builder => '_build_registration_form'
+);
+
+sub _build_registration_form {
+    my $form = Code4Health::AppKitX::Users::HTML::FormHandler::RegistrationForm->new(
+        name => "registration_form",
+        field_list => [
+            submit => {
+                type => 'Submit',
+                value => 'Register',
+            }
+        ]
+    );
+
+    return $form;
+}
+
+sub register
+    : Public
+    : Path('/register')
+    : Args(0)
+{
+    my ($self, $c) = @_;
+
+    my $form = $self->registration_form;
+
+    if ($form->process(ctx => $c, params => scalar $c->req->parameters)) {
+        $c->model('Users')->resultset('Person')->add_user({
+            %{$form->value},
+            full_name => $form->value->{first_name} . " " . $form->value->{surname}
+        });
+    }
+
+    $c->stash(
+        render_form => $form->render
+    );
+
+    $c->detach(qw/Controller::Root default/);
+}
 
 =head1 NAME
 
@@ -44,3 +79,4 @@ This software is licensed according to the "IP Assignment Schedule" provided wit
 
 =cut
 
+1;
