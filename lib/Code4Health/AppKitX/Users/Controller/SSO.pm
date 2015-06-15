@@ -47,6 +47,7 @@ sub authenticate
                 name => $c->user->username, 
                 photourl => '',
                 client_id => $client_id,
+                roles => $c->user->vanilla_roles,
             };
             $c->stash->{data}->{signature} = vanilla_signature($c->stash->{data}, $secret);
         }
