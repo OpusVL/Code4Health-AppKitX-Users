@@ -12,6 +12,7 @@ requires 'namespace::autoclean';
 requires 'OpusVL::AppKit';
 requires 'Catalyst::Model::DBIC::Schema';
 requires 'Code4Health::DB';
+requires 'String::Compare::ConstantTime';
 
 build_requires 'Catalyst::Runtime' => '5.80015';
 build_requires 'Test::WWW::Mechanize::Catalyst';
