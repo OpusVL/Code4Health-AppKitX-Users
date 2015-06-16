@@ -3,7 +3,7 @@ package Code4Health::AppKitX::Users::Controller::Users;
 use Moose;
 use Code4Health::AppKitX::Users::HTML::FormHandler::RegistrationForm;
 use namespace::autoclean;
-BEGIN { extends 'Catalyst::Controller'; };
+BEGIN { extends 'Catalyst::Controller::HTML::FormFu'; };
 with 'OpusVL::AppKit::RolesFor::Controller::GUI';
 
 __PACKAGE__->config
@@ -56,6 +56,20 @@ sub register
         render_form => $form->render
     );
 
+    $c->detach(qw/Controller::Root default/);
+}
+
+sub profile
+    : Public
+    : Path('/profile')
+    : Args(0)
+    : AppKitForm
+{
+    my ($self, $c) = @_;
+    my $user = $c->stash->{user};
+
+    my $form = $c->stash->{form};
+    $c->stash( render_form => $form->render );
     $c->detach(qw/Controller::Root default/);
 }
 

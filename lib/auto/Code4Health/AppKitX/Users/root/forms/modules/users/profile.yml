@@ -1,0 +1,53 @@
+---
+indicator: submit                                                               
+auto_fieldset: 0                                                                
+form_error_message: Oops, looks like there was a problem - please check below and try again.
+
+elements:
+
+  - type: Fieldset
+    legend_loc: "Your information"
+    name: fields
+    elements:
+        - type: Email
+          name: email_address
+          label: Email Address
+        - type: Text
+          name: title
+          label: Title
+        - type: Text
+          name: first_name
+          label: First name
+        - type: Text
+          name: surname
+          label: Surname
+
+
+  - type: Fieldset
+    legend_loc: "Extra information"
+    name: prf_fields
+    elements:
+
+      - type: Block
+        tag: p
+        name: no_fields
+        content: No fields defined.
+
+  - type: Block
+    name: buttons
+    elements:
+
+      - type: Button                                                                
+        name: submit
+        value: Save
+        attributes:
+            type: submit
+            class: "btn btn-primary"
+
+      - type: Button                                                              
+        name: cancel
+        value: Cancel
+        attributes:
+            class: "btn btn-danger"
+
+
