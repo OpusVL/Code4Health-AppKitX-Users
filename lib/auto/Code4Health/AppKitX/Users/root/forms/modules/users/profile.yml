@@ -37,14 +37,14 @@ elements:
     name: buttons
     elements:
 
-      - type: Button                                                                
+      - type: Submit                                                                
         name: submit
         value: Save
         attributes:
             type: submit
             class: "btn btn-primary"
 
-      - type: Button                                                              
+      - type: Submit
         name: cancel
         value: Cancel
         attributes:
