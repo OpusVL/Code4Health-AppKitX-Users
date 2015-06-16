@@ -22,6 +22,18 @@ has 'registration_form' => (
     builder => '_build_registration_form'
 );
 
+has 'prf_model' => (
+    is => 'ro',
+    default => 'Users',
+);
+
+has 'prf_owner' => (
+    is => 'ro',
+    default => 'Person'
+);
+
+with 'OpusVL::AppKitX::PreferencesAdmin::Role::ObjectPreferences';
+
 sub _build_registration_form {
     my $form = Code4Health::AppKitX::Users::HTML::FormHandler::RegistrationForm->new(
         name => "registration_form",
@@ -66,11 +78,37 @@ sub profile
     : AppKitForm
 {
     my ($self, $c) = @_;
-    my $user = $c->stash->{user};
-
+    my $user = $c->user;
     my $form = $c->stash->{form};
+    $self->construct_global_data_form($c, { object => $user });
+    $form->process;
+
+    my $defaults = $self->_object_defaults($user);
+    $self->add_prefs_defaults($c, { 
+        defaults => $defaults,
+        object => $user,
+    }); 
+    $form->default_values($defaults);
+    
+    if($form->submitted_and_valid) {
+        $self->update_prefs_values($c, $user);
+        $c->res->redirect($c->req->uri);
+        $c->flash->{status_msg} = "Profile saved";
+    }
+
     $c->stash( render_form => $form->render );
     $c->detach(qw/Controller::Root default/);
+}
+
+sub _object_defaults {
+    my ($self, $object) = @_;
+
+    return {
+        email_address => $object->email_address,
+        title => $object->title,
+        first_name => $object->first_name,
+        surname => $object->surname,
+    };
 }
 
 =head1 NAME
