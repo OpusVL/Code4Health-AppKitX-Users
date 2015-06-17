@@ -60,11 +60,12 @@ sub register
     if ($form->process(ctx => $c, params => scalar $c->req->parameters)) {
         $c->model('Users')->resultset('Person')->add_user({
             %{$form->value},
+            username => $form->value->{email_address},
             full_name => $form->value->{first_name} . " " . $form->value->{surname}
         });
         $c->authenticate({
-            username => $c->req->param('username'),
-            password => $c->req->param('password'),
+            username => $form->value->{email_address},
+            password => $form->value->{password},
         });
         $c->flash->{status_msg} = "Registration successful! Welcome to Code4Health";
         $c->res->redirect('/');
@@ -82,6 +83,7 @@ sub profile
     : Path('/profile')
     : Args(0)
     : AppKitForm
+    : Does('NeedsLogin')
 {
     my ($self, $c) = @_;
     my $user = $c->user;

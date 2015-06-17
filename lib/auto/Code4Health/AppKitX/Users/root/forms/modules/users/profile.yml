@@ -12,9 +12,15 @@ elements:
         - type: Email
           name: email_address
           label: Email Address
-        - type: Text
+        - type: Select
           name: title
           label: Title
+          options:
+              - [ 'Mr', 'Mr' ]
+              - [ 'Mrs', 'Mrs' ]
+              - [ 'Ms', 'Ms' ]
+              - [ 'Mx', 'Mx' ]
+              - [ 'Dr', 'Dr' ]
         - type: Text
           name: first_name
           label: First name
