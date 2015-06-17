@@ -62,6 +62,12 @@ sub register
             %{$form->value},
             full_name => $form->value->{first_name} . " " . $form->value->{surname}
         });
+        $c->authenticate({
+            username => $c->req->param('username'),
+            password => $c->req->param('password'),
+        });
+        $c->flash->{status_msg} = "Registration successful! Welcome to Code4Health";
+        $c->res->redirect('/');
     }
 
     $c->stash(
