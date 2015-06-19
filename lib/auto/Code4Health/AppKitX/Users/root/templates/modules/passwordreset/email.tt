@@ -1,0 +1,11 @@
+Dear [% user_name %],
+
+We received a password reset request for this email address at the NHS
+Code4Health website.
+
+If you initiated this request, please follow the link below to continue the
+password reset process:
+
+[% c.uri_for(c.controller.action_for('reset'), { h => password_reset_hash }) %]
+
+If you didn't initiate this request, you can freely ignore the email.
