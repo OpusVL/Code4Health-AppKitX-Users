@@ -160,6 +160,15 @@ sub profile
     my $user = $c->user;
     my $form = $c->stash->{form};
     $self->construct_global_data_form($c, { object => $user });
+
+    $form
+        ->get_field('current_pass')
+        ->constraint({ 
+            type => 'Callback',
+            callback => sub { $c->user->check_password($_[0]) },
+            message => "Invalid password",
+        });
+
     $form->process;
 
     my $defaults = $self->_object_defaults($user);
@@ -175,6 +184,9 @@ sub profile
             title => $form->param_value('title'),
             first_name => $form->param_value('first_name'),
             surname => $form->param_value('surname'),
+            $form->param_value('password')
+                ? (password => $form->param_value('password'))
+                : (),
         });
         $self->update_prefs_values($c, $user);
         $c->res->redirect($c->req->uri);
