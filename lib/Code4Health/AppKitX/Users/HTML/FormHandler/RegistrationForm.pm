@@ -18,7 +18,7 @@ has_field email_address => (
     required => 1,
 );
 has_field password => (
-    type => 'Password'
+    type => 'Password',
     required => 1,
 );
 has_field title => (
