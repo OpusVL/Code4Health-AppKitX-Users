@@ -21,6 +21,10 @@ has_field password => (
     type => 'Password',
     required => 1,
 );
+has_field confirm_password => (
+    type => 'Password',
+    required => 1,
+);
 has_field title => (
     type => 'Select',
     options => [
@@ -34,4 +38,11 @@ has_field surname => (
     required => 1,
 );
 
+sub validate_password {
+    my ($self, $field) = @_;
+    my $conf = $self->field('confirm_password');
+
+    $field->add_error("Passwords do not match!"), $conf->add_error('') 
+        unless $field->value eq $conf->value;
+}
 1;
