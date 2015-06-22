@@ -1,0 +1,6 @@
+Welcome [% user_name %],
+
+To complete your Code4Health registration, please follow the link below.
+
+[% c.uri_for(c.controller.action_for('verify_email'), [ email_hash ] ) %]
+

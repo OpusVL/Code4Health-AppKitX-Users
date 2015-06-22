@@ -58,7 +58,7 @@ sub register
     my $form = $self->registration_form;
 
     if ($form->process(ctx => $c, params => scalar $c->req->parameters)) {
-        $c->model('Users')->resultset('Person')->add_user({
+        my $user = $c->model('Users')->resultset('Person')->add_user({
             %{$form->value},
             username => $form->value->{email_address},
             full_name => $form->value->{first_name} . " " . $form->value->{surname}
@@ -67,7 +67,10 @@ sub register
             username => $form->value->{email_address},
             password => $form->value->{password},
         });
-        $c->flash->{status_msg} = "Registration successful! Welcome to Code4Health";
+        
+        $self->_verification_email($c, $user);
+
+        $c->flash->{status_msg} = "Registration successful! Please check your email for a verification link.";
         $c->res->redirect('/');
     }
 
@@ -76,6 +79,74 @@ sub register
     );
 
     $c->detach(qw/Controller::Root default/);
+}
+
+sub resend_verification_email
+    : Public
+    : Path('/resend_verification_email')
+    : Does('NeedsLogin')
+    : Args(0)
+{
+    my ($self, $c) = @_;
+    my $user = $c->user;
+
+    $self->_verification_email($c, $user);
+
+    $c->flash->{status_msg} = "Verification email sent.";
+    $c->res->redirect($c->uri_for($self->action_for('profile')));
+}
+
+sub _verification_email {
+    my ($self, $c, $user) = @_;
+
+    my $verification = $c->model('Users::EmailVerification')->generate($user->username);
+    $c->stash->{user_name} = $user->full_name;
+    $c->stash->{email_hash} = $verification->hash;
+    $c->stash->{no_wrapper} = 1;
+    $c->stash->{template} = 'modules/users/email_verification.tt';
+    $c->forward($c->view('AppKitTT'));
+    my $email_body = $c->res->body;
+
+    ## TT view tends to leave a bunch of newlines
+    $email_body =~ s/(?:^\s*$)+//m;
+
+    $c->log->debug($email_body);
+
+    $c->stash->{email} = {
+        to => $user->username,
+        from => $c->config->{system_email_address},
+        subject => "Code4Health Email Verification",
+        body => $email_body,
+    };
+
+    $c->forward($c->view('Email'));
+
+}
+
+# Note that this is a GET request that changes things. This felt bad but the
+# consensus on the internet is that it's OK.
+sub verify_email
+    : Public
+    : Path('/verify_email')
+    : Args(1)
+{
+    my ($self, $c, $token) = @_;
+
+    my $verification = $c->model('Users::EmailVerification')->find({
+        hash => $token
+    })
+        or $c->go('/not_found');
+
+    my $user = $c->model('Users::Person')->find({
+        username => $verification->email
+    })
+        or $c->go('/not_found');
+
+    $user->add_to_group('Verified');
+    $verification->delete;
+
+    $c->flash->{status_msg} = "Verification complete!";
+    $c->res->redirect('/');
 }
 
 sub profile
