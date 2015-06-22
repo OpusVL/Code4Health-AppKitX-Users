@@ -10,6 +10,7 @@ all_from 'lib/Code4Health/AppKitX/Users.pm';
 requires 'Moose';
 requires 'namespace::autoclean';
 requires 'OpusVL::AppKit';
+requires 'OpusVL::AppKitX::PasswordReset';
 requires 'Catalyst::Model::DBIC::Schema';
 requires 'Code4Health::DB';
 requires 'String::Compare::ConstantTime';
