@@ -14,10 +14,12 @@ has '+is_html5' => (
 );
 
 has_field email_address => (
-    type => 'Email'
+    type => 'Email',
+    required => 1,
 );
 has_field password => (
     type => 'Password'
+    required => 1,
 );
 has_field title => (
     type => 'Select',
@@ -25,7 +27,11 @@ has_field title => (
         map +{ value => $_, label => $_ }, qw/Mr Mrs Miss Ms Mx Dr/
     ],
 );
-has_field first_name => ();
-has_field surname => ();
+has_field first_name => (
+    required => 1,
+);
+has_field surname => (
+    required => 1,
+);
 
 1;
