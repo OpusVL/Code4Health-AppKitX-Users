@@ -57,9 +57,14 @@ sub register
 
     my $form = $self->registration_form;
 
-    if ($form->process(ctx => $c, params => scalar $c->req->parameters)) {
+    my $params = $c->req->parameters;
+    delete $params->{submit};
+
+    if ($form->process(ctx => $c, params => $params)) {
+        delete $params->{confirm_password};
+
         my $user = $c->model('Users')->resultset('Person')->add_user({
-            %{$form->value},
+            %{$params},
             username => $form->value->{email_address},
             full_name => $form->value->{first_name} . " " . $form->value->{surname}
         });
@@ -193,7 +198,18 @@ sub profile
         $c->flash->{status_msg} = "Profile saved";
     }
 
-    $c->stash( render_form => $form->render );
+
+    $c->stash->{template} = 'modules/users/organisations_form.tt';
+    $c->stash->{no_wrapper} = 1;
+    $c->forward($c->view('AppKitTT'));
+    my $organisations_form = $c->res->body;
+
+    $c->stash->{no_wrapper} = 0;
+    push @{$c->stash->{app_scripts}}, 'js/organisations.js';
+    push @{$c->stash->{app_css}}, 'css/organisations.css';
+    $c->stash( organisations_form => $organisations_form );
+
+    $c->stash( profile_form => $form->render );
     $c->detach(qw/Controller::Root default/);
 }
 

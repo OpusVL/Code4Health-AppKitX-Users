@@ -26,6 +26,11 @@ after 'setup_components' => sub {
     );
     CatalystX::InjectComponent->inject(
         into      => $class,
+        component => 'Code4Health::AppKitX::Users::Controller::Organisations',
+        as        => 'Controller::Modules::Organisations'
+    );
+    CatalystX::InjectComponent->inject(
+        into      => $class,
         component => 'Code4Health::AppKitX::Users::Model::Users',
         as        => 'Model::Users'
     );
