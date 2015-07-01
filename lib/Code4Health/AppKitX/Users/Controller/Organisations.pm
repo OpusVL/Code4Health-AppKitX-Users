@@ -74,4 +74,59 @@ sub user_primary_org_POST
     };
 }
 
+sub user_secondary_org
+    : Does('NeedsLogin')
+    : Local
+    : Public
+    : Args
+    : Path('/organisations/user_secondary_org')
+    : ActionClass('REST')
+{
+    my ($self, $c, $code) = @_;
+    $c->stash->{code} = $code;
+}
+
+sub user_secondary_org_POST
+    : Action
+    : Public
+    : PathPart('')
+    : Chained('user_secondary_org')
+{
+    my ($self, $c) = @_;
+    my $code = $c->req->body_params->{code};
+
+    my $org = $c->model('Users::Organisation')->find($code);
+
+    $c->user->add_to_secondary_organisations($org);
+
+    $self->status_ok($c, {
+        entity => {
+            name => $org->name,
+            code => $org->code,
+        }
+    })
+}
+
+sub user_secondary_org_DELETE
+    : Action
+    : Public
+    : PathPart('')
+    : Chained('user_secondary_org')
+{
+    my ($self, $c) = @_;
+    my $code = $c->stash->{code};
+
+    my @link = $c->user->secondary_organisation_links->search({
+        organisation_id => $code
+    });
+
+    if (! @link) {
+        $c->status_not_found($c, { message => "User is not associated with this organisation" });
+        $c->detach;
+    }
+
+    $link[0]->delete;
+    $self->status_no_content($c);
+}
+
 1;
