@@ -198,7 +198,11 @@ sub profile
         $c->flash->{status_msg} = "Profile saved";
     }
 
-
+    $c->stash->{secondary_organisations} = [ 
+        $c->user
+            ->secondary_organisations
+            ->search({}, { order_by => "name" })
+    ];
     $c->stash->{template} = 'modules/users/organisations_form.tt';
     $c->stash->{no_wrapper} = 1;
     $c->forward($c->view('AppKitTT'));

@@ -46,7 +46,7 @@
 					</div>
 				</li>
 			[% END %]
-			[% FOR org IN c.user.secondary_organisations %]
+			[% FOR org IN secondary_organisations %]
 				[% PROCESS secondary_org org=org %]
 			[% END %]
 			[% PROCESS secondary_org org= %]
