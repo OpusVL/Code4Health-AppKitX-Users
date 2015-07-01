@@ -38,11 +38,11 @@ has_field surname => (
     required => 1,
 );
 
-sub validate_password {
+sub validate_confirm_password {
     my ($self, $field) = @_;
-    my $conf = $self->field('confirm_password');
+    my $pass = $self->field('password');
 
-    $field->add_error("Passwords do not match!"), $conf->add_error('') 
-        unless $field->value eq $conf->value;
+    $field->add_error("Passwords do not match!"), $pass->add_error('') 
+        unless $field->value eq $pass->value;
 }
 1;
