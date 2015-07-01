@@ -205,8 +205,8 @@ sub profile
     my $organisations_form = $c->res->body;
 
     $c->stash->{no_wrapper} = 0;
-    push @{$c->stash->{app_scripts}}, 'js/organisations.js';
-    push @{$c->stash->{app_css}}, 'css/organisations.css';
+    push @{$c->stash->{app_scripts}}, '/js/organisations.js', '/static/js/curry.js';
+    push @{$c->stash->{app_css}}, '/css/organisations.css';
     $c->stash( organisations_form => $organisations_form );
 
     $c->stash( profile_form => $form->render );

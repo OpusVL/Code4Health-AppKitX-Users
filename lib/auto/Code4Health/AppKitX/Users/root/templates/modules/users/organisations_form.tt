@@ -2,17 +2,22 @@
 	<legend>Select organisations</legend>
 	<div class="form-group">
 		<label for="primary_organisation">Primary organisation</label>
-		<input type="text" 
-			name="primary_organisation"
-			id="primary_organisation"
-			value="[% c.user.primary_organisation.name %]"
-			class="organisation-autocomplete form-control">
+		<div class="input-group">
+			<input type="text"
+				name="primary_organisation"
+				id="primary_organisation"
+				value="[% c.user.primary_organisation.name %]"
+				class="form-control">
+			<span class="input-group-addon saved-indicator">
+				<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+			</span>
+		</div>
 	</div>
 	<div class="form-group">
 		<label for="secondary_organisation">Secondary organisations</label>
-		<input type="text" 
+		<input type="text"
 			name="secondary_organisation"
 			id="secondary_organisation"
-			class="organisation-autocomplete form-control">
+			class="form-control">
 	</div>
 </fieldset>
