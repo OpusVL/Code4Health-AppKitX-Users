@@ -74,6 +74,9 @@
 					id="secondary_organisation"
 					class="form-control">
 			</div>
+			<span class="help-block">
+				Items will be added automatically when selected.
+			</span>
 		</div>
 
 		<ul class="secondary-orgs list-group">
@@ -87,7 +90,10 @@
 							class="form-control"
 						>
 						<span class="input-group-btn">
-							<button class="btn btn-primary">
+							<button 
+								class="btn btn-primary"
+								title="Remove"
+							>
 								<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 							</button>
 						</span>

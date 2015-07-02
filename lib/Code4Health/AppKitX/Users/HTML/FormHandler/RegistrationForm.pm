@@ -37,7 +37,14 @@ has_field first_name => (
 has_field surname => (
     required => 1,
 );
-has_field primary_organisation => ();
+
+# This is a shit way of adding help text, but there isn't another
+has_field primary_organisation => (
+    tags => {
+        after_element => 
+            qq{\n<span class="help-block">Enter "other" if your organisation does not appear</span>}
+    }
+);
 has_field primary_organisation_id => (
     type => 'Hidden',
 );
