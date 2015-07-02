@@ -62,6 +62,7 @@ sub register
 
     if ($form->process(ctx => $c, params => $params)) {
         delete $params->{confirm_password};
+        delete $params->{primary_organisation};
 
         my $user = $c->model('Users')->resultset('Person')->add_user({
             %{$params},
@@ -82,6 +83,9 @@ sub register
     $c->stash(
         render_form => $form->render
     );
+
+    push @{$c->stash->{app_scripts}}, 'js/register.js';
+    push @{$c->stash->{app_css}}, 'css/organisations.css';
 
     $c->detach(qw/Controller::Root default/);
 }

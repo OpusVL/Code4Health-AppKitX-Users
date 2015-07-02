@@ -37,6 +37,10 @@ has_field first_name => (
 has_field surname => (
     required => 1,
 );
+has_field primary_organisation => ();
+has_field primary_organisation_id => (
+    type => 'Hidden',
+);
 
 sub validate_confirm_password {
     my ($self, $field) = @_;
