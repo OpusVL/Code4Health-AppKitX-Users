@@ -85,10 +85,6 @@ sub validate {
 
         last ORG if $org_id->value;
 
-        if (not $org_id->value and not $org->value) {
-            $org->add_error("Please select your primary organisation");
-        }
-
         if ($org->value eq 'OTHER' and not $org_other->value) {
             $org_other->add_error("Please enter your organisation's name");
         }
