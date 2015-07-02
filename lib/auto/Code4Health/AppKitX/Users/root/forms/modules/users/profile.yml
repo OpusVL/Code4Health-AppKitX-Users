@@ -22,6 +22,7 @@ elements:
               - [ 'Ms', 'Ms' ]
               - [ 'Mx', 'Mx' ]
               - [ 'Dr', 'Dr' ]
+              - [ 'Professor', 'Professor' ]
         - type: Text
           name: first_name
           label: First name

@@ -28,7 +28,7 @@ has_field confirm_password => (
 has_field title => (
     type => 'Select',
     options => [
-        map +{ value => $_, label => $_ }, qw/Mr Mrs Miss Ms Mx Dr/
+        map +{ value => $_, label => $_ }, qw/Mr Mrs Miss Ms Mx Dr Professor/
     ],
 );
 has_field first_name => (
