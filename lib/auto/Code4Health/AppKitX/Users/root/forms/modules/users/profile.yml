@@ -5,7 +5,6 @@ form_error_message: Oops, looks like there was a problem - please check below an
 error_tag: div
 
 elements:
-
   - type: Fieldset
     legend_loc: "Your information"
     name: fields
@@ -73,4 +72,6 @@ elements:
         attributes:
             class: "btn btn-danger"
 
+filters:
+  - TrimEdges
 
