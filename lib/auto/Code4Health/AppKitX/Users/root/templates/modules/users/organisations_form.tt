@@ -22,10 +22,15 @@
 			<label for="secondary_organisation">Secondary organisations</label>
 		</div>
 		<div class="panel-body">
-			<input type="text"
-				name="secondary_organisation"
-				id="secondary_organisation"
-				class="form-control">
+			<div class="input-group">
+				<span class="input-group-addon">
+					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+				</span>
+				<input type="text"
+					name="secondary_organisation"
+					id="secondary_organisation"
+					class="form-control">
+			</div>
 		</div>
 
 		<ul class="secondary-orgs list-group">
