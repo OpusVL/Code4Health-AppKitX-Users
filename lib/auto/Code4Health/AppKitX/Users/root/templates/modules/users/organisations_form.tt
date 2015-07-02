@@ -6,14 +6,57 @@
 		</div>
 		<div class="panel-body">
 			<div class="input-group">
+				<span class="input-group-addon">
+					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+				</span>
 				<input type="text"
 					name="primary_organisation"
 					id="primary_organisation"
-					value="[% c.user.primary_organisation.name %]"
-					class="form-control">
+					value="[% IF c.user.primary_organisation -%][%- c.user.primary_organisation.name -%]
+						[% ELSIF c.user.primary_organisation_other %]OTHER
+						[%- END %]"
+					class="form-control"
+				>
 				<span class="input-group-addon saved-indicator">
-					<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+					<span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"></span>
 				</span>
+			</div>
+			<span class="help-block">
+				Enter "other" if your organisation does not appear.
+			</span>
+			<div 
+				class="form-group [% UNLESS c.user.primary_organisation_other %]hidden[% END %]"
+			>
+				<label for="primary_organisation_other">
+					Other organisation
+				</label>
+				<div class="input-group">
+					<span class="input-group-addon">
+						<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+					</span>
+					<input type="text"
+						name="primary_organisation_other"
+						id="primary_organisation_other"
+						value="[% c.user.primary_organisation_other %]"
+						class="form-control"
+						title="Press enter to save"
+					>
+					<span class="input-group-btn">
+						<button 
+							class="btn btn-primary saved-indicator"
+							title="Save"
+						>
+							<span class="glyphicon 
+								[%- IF c.user.primary_organisation_other -%]
+									glyphicon-floppy-saved
+								[%- ELSE -%]
+									glyphicon-floppy-disk
+								[%- END %]" 
+								aria-hidden="true"
+							></span>
+						</button>
+					</span>
+				</div>
 			</div>
 		</div>
 	</div>

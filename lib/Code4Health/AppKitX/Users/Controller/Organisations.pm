@@ -38,6 +38,13 @@ sub search_GET
         ]
     };
 
+    if ($c->req->query_params->{want_other}) {
+        unshift @{$response->{suggestions}}, {
+            value => "OTHER",
+            data => '',
+        };
+    }
+
     $self->status_ok($c, {
         entity => $response
     });
@@ -59,10 +66,12 @@ sub user_primary_org_POST
     my ($self, $c) = @_;
 
     my $org = $c->req->body_params->{code};
+    my $other = $c->req->body_params->{other};
 
     try {
         $c->user->update({
-            primary_organisation_id => $org
+            primary_organisation_id => $org || undef,
+            primary_organisation_other => $other,
         });
         $self->status_ok($c, {
             entity => { message => "Update successful" }
