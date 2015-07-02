@@ -174,7 +174,7 @@ sub profile
         ->get_field('current_pass')
         ->constraint({ 
             type => 'Callback',
-            callback => sub { $c->user->check_password($_[0]) },
+            callback => sub { !$_[0] || $c->user->check_password($_[0]) },
             message => "Invalid password",
         });
 
@@ -198,8 +198,8 @@ sub profile
                 : (),
         });
         $self->update_prefs_values($c, $user);
-        $c->res->redirect($c->req->uri);
         $c->flash->{status_msg} = "Profile saved";
+        return $c->res->redirect($c->req->uri);
     }
 
     $c->stash->{secondary_organisations} = [ 
