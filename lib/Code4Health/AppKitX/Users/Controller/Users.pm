@@ -63,6 +63,9 @@ sub register
     if ($form->process(ctx => $c, params => $params)) {
         delete $params->{confirm_password};
         delete $params->{primary_organisation};
+        # Avoid providing the empty string instead of null
+        $params->{primary_organisation_id} ||= undef;
+        $params->{primary_organisation_other} ||= undef;
 
         my $user = $c->model('Users')->resultset('Person')->add_user({
             %{$params},
