@@ -121,7 +121,7 @@ has_block account_details => (
 has_block about_you => (
     tag => 'fieldset',
     label => "About you",
-    render_list => [ qw/registrant_category registrant_category_other email_preferences/ ],
+    render_list => [ qw/registrant_category registrant_category_other email_preferences submit/ ],
 );
 
 sub build_render_list {
@@ -164,6 +164,19 @@ sub validate {
         if ($org->value eq 'OTHER' and not $org_other->value) {
             $org_other->add_error("Please enter your organisation's name");
         }
+    }
+
+    CAT: {
+        my $category = $self->field('registrant_category');
+        my $other = $self->field('registrant_category_other');
+
+        $category->add_error("Please select a description") and last CAT
+            if not $category->value;
+
+        last CAT if $category->value ne 'other';
+
+        $other->add_error("Please enter a short description")
+            if not $other->value;
     }
 
 }
