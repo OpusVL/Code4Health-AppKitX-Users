@@ -109,6 +109,11 @@ has_field email_preferences => (
     ]
 );
 
+has_field submit => (
+    type => 'Submit',
+    value => 'Register',
+);
+
 has_block account_details => (
     tag => 'fieldset',
     label => "Account details",
