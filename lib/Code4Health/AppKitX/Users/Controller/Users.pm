@@ -1,7 +1,7 @@
 package Code4Health::AppKitX::Users::Controller::Users;
 
 use Moose;
-use Code4Health::AppKitX::Users::HTML::FormHandler::RegistrationForm;
+use Code4Health::AppKitX::Users::Form::RegistrationForm;
 use namespace::autoclean;
 BEGIN { extends 'Catalyst::Controller::HTML::FormFu'; };
 with 'OpusVL::AppKit::RolesFor::Controller::GUI';
@@ -35,7 +35,7 @@ has 'prf_owner' => (
 with 'OpusVL::AppKitX::PreferencesAdmin::Role::ObjectPreferences';
 
 sub _build_registration_form {
-    my $form = Code4Health::AppKitX::Users::HTML::FormHandler::RegistrationForm->new(
+    my $form = Code4Health::AppKitX::Users::Form::RegistrationForm->new(
         name => "registration_form",
         field_list => [
             submit => {
