@@ -83,6 +83,10 @@ has_field registrant_category => (
 has_field registrant_category_other => (
     type => 'Text',
     label => "Other (please specify)",
+    wrapper_class => 'shown-with',
+    wrapper_attr => {
+        rel => '[name=registrant_category]@other'
+    }
 );
 
 has_field email_preferences => (

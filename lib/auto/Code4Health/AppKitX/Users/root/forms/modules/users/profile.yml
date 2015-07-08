@@ -41,6 +41,9 @@ elements:
         - type: Text
           name: registrant_category_other
           label: "Other (please specify)"
+          container_attributes:
+            class: "shown-with"
+            rel: "[name=registrant_category]@other"
 
         - type: Checkboxgroup
           name: email_preferences
