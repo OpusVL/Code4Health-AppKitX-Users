@@ -29,6 +29,27 @@ elements:
           name: surname
           label: Surname
 
+        - type: Radiogroup
+          name: registrant_category
+          label: "I am (select a single option that describes you)"
+          options:
+            - [ 'healthcare_professional', "A Healthcare Professional (including clinicians, managers and other professions)" ]
+            - [ 'social_professional', "A Social Care Professional (including social workers, managers, care workers and other professions)" ]
+            - [ 'software_developer', "A Software Developer (including engineers, designers and informaticians)" ]
+            - [ 'civilian', "A Citizen, Patient or Carer" ]
+            - [ 'other', "Other (please specify)" ]
+        - type: Text
+          name: registrant_category_other
+          label: "Other (please specify)"
+
+        - type: Checkboxgroup
+          name: email_preferences
+          label: "Email preferences"
+          options:
+            - [ 'members', "General information, news, events and activities likely to be of interest to members from Code4Health" ]
+            - [ 'communities', "Specific community information, news, events and activities from those communities with which you have registered" ]
+            - [ 'supporters', "Information about news, events and activities likely to be of interest to members from Code4Health Supporters" ]
+
   - type: Fieldset
     legend_loc: "Extra information"
     name: prf_fields

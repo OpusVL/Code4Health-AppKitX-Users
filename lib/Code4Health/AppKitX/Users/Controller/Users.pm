@@ -181,6 +181,28 @@ sub profile
             message => "Invalid password",
         });
 
+    my $required_with_other = sub {
+        my ($params, $self) = @_;
+        
+        return $params->{'registrant_category'} eq 'other'
+    };
+
+    $form->get_all_element({name => 'registrant_category'})->constraint([
+        {
+            type     => 'Required',
+            message  => "Please select a description",
+        },
+        {
+            type             => 'DependOn',
+            others           => [ 'registrant_category_other' ],
+            attach_errors_to => ['registrant_category_other'],
+            message          => "Please enter a short description",
+            when             => {
+                callback => $required_with_other,
+            }
+        }
+    ]);
+
     $form->process;
 
     my $defaults = $self->_object_defaults($user);
@@ -189,13 +211,16 @@ sub profile
         object => $user,
     }); 
     $form->default_values($defaults);
-    
+
     if($form->submitted_and_valid) {
         $user->update({
             email_address => $form->param_value('email_address'),
             title => $form->param_value('title'),
             first_name => $form->param_value('first_name'),
             surname => $form->param_value('surname'),
+            registrant_category => $form->param_value('registrant_category'),
+            registrant_category_other => $form->param_value('registrant_category_other'),
+            email_preferences => [ $form->param_list('email_preferences') ],
             $form->param_value('password')
                 ? (password => $form->param_value('password'))
                 : (),
@@ -232,6 +257,9 @@ sub _object_defaults {
         title => $object->title,
         first_name => $object->first_name,
         surname => $object->surname,
+        registrant_category => $object->registrant_category,
+        registrant_category_other => $object->registrant_category_other,
+        email_preferences => $object->email_preferences,
     };
 }
 
