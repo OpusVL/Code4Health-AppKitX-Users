@@ -107,3 +107,16 @@
 		</ul>
 	</div>
 </fieldset>
+<fieldset>
+	<legend>Communities</legend>
+    [% UNLESS communities.size > 0 %]
+    <p>You are not currently a member of any communities.</p>
+    [% ELSE %]
+    <ul>
+        [% FOR com IN communities %]
+        <li class="record record-community field-name" data-code="[% com.code %]">[% com.name %]</li>
+        [% END %]
+    </ul>
+    [% END %]
+    <p>To join a new community use the link on it's page.</p>
+</fieldset>

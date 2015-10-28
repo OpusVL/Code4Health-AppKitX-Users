@@ -277,6 +277,7 @@ sub profile
             ->secondary_organisations
             ->search({}, { order_by => \"REPLACE(name, ',', '')" })
     ];
+    $c->stash->{communities} = [$c->user->communities->active->all];
     $c->stash->{template} = 'modules/users/organisations_form.tt';
     $c->stash->{no_wrapper} = 1;
     $c->forward($c->view('AppKitTT'));
@@ -284,6 +285,7 @@ sub profile
 
     $c->stash->{no_wrapper} = 0;
     push @{$c->stash->{app_scripts}}, '/js/organisations.js';
+    push @{$c->stash->{app_scripts}}, '/js/communities.js';
     push @{$c->stash->{app_css}}, '/css/organisations.css';
     $c->stash( organisations_form => $organisations_form );
 
