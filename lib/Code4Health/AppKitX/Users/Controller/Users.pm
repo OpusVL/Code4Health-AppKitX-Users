@@ -171,6 +171,37 @@ sub verify_email
     $c->res->redirect('/');
 }
 
+sub join_community
+    : Public
+    : Local
+    : Args(0)
+    : Does('NeedsLogin')
+    : POST
+{
+    my ($self, $c) = @_;
+    my $params = $c->req->body_parameters; # only take params via the post
+    my $community_code = $params->{community};
+    # FIXME: check it's a post
+    $c->stash->{no_wrapper} = 1;
+    $c->response->headers->header('Content-Type', 'application/json');
+    $c->stash->{data} = $c->user->join_community($community_code);
+}
+
+sub leave_community
+    : Public
+    : Local
+    : Args(0)
+    : Does('NeedsLogin')
+    : POST
+{
+    my ($self, $c) = @_;
+    my $params = $c->req->body_parameters; # only take params via the post
+    my $community_code = $params->{community};
+    $c->stash->{no_wrapper} = 1;
+    $c->response->headers->header('Content-Type', 'application/json');
+    $c->stash->{data} = $c->user->leave_community($community_code);
+}
+
 sub profile
     : Public
     : Path('/profile')
