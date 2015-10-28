@@ -57,7 +57,13 @@ sub register
 
     my $form = $self->registration_form;
 
-    my $params = $c->req->parameters;
+    my $community_code = $c->req->query_parameters->{community};
+    my $community;
+    if($community_code)
+    {
+        $community = $c->model('Users::Community')->find({ code => $community_code });
+    }
+    my $params = $c->req->body_parameters; # only take params via the post
     delete $params->{submit};
 
     if ($form->process(ctx => $c, params => $params)) {
@@ -76,6 +82,10 @@ sub register
             username => $form->value->{email_address},
             password => $form->value->{password},
         });
+        if($community)
+        {
+            $user->create_related('community_links', { community_id => $community->id });
+        }
         
         $self->_verification_email($c, $user);
 
