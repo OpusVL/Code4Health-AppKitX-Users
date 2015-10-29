@@ -118,5 +118,5 @@
         [% END %]
     </ul>
     [% END %]
-    <p>To join a new community use the link on it's page.</p>
+    <p>To join a new community use the link on its page.</p>
 </fieldset>
