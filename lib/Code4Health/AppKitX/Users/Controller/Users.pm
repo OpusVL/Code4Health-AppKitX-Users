@@ -73,6 +73,10 @@ sub register
         $params->{primary_organisation_id} ||= undef;
         $params->{primary_organisation_other} ||= undef;
 
+        # When only one is selected, it's not an array
+        $params->{email_preferences} = [ $params->{email_preferences} ]
+            if not ref $params->{email_preferences};
+
         my $user = $c->model('Users')->resultset('Person')->add_user({
             %{$params},
             username => $form->value->{email_address},
