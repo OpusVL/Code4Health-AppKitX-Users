@@ -1,0 +1,12 @@
+Dear [% user_name %],
+
+Somebody tried to register on [% c.uri_for('/') %] with this email address, but
+it already existed on our system.
+
+The password entered did not match our records.
+
+If this was you, you can use the following URL to request a password reset:
+[% c.uri_for('/reset_password') %]
+
+If this was not you, rest assured nothing has changed, and the person who tried
+it has no information about your account.

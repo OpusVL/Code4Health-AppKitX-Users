@@ -77,22 +77,41 @@ sub register
         $params->{email_preferences} = [ $params->{email_preferences} ]
             if not ref $params->{email_preferences};
 
-        my $user = $c->model('Users')->resultset('Person')->add_user({
+        my ($user, $existed) = $c->model('Users')->resultset('Person')->add_user({
             %{$params},
             username => $form->value->{email_address},
             full_name => $form->value->{first_name} . " " . $form->value->{surname}
         });
-        $c->authenticate({
+
+        my $authed = $c->authenticate({
             username => $form->value->{email_address},
             password => $form->value->{password},
         });
-        if($community)
-        {
-            $user->create_related('community_links', { community_id => $community->id });
-        }
-        
-        $self->_verification_email($c, $user);
 
+        if ($existed) {
+            if (not $authed) {
+                # Send an email about this to the user, in lieu of the
+                # verification link.
+                $self->_reregister_email($c, $user);
+            }
+            else {
+                $c->flash->{status_msg} = "An account with these credentials
+                already exists, so we logged you in. Please update your profile
+                if necessary.";
+
+                return $c->res->redirect('/');
+            }
+        }
+        else {
+            # A new user should be set up this way, but an existing user should
+            # not have their previous info clobbered.
+            if($community)
+            {
+                $user->create_related('community_links', { community_id => $community->id });
+            }
+
+            $self->_verification_email($c, $user);
+        }
         $c->flash->{status_msg} = "Registration successful! Please check your email for a verification link.";
         $c->res->redirect('/');
     }
@@ -146,7 +165,30 @@ sub _verification_email {
     };
 
     $c->forward($c->view('Email'));
+}
 
+sub _reregister_email {
+    my ($self, $c, $user) = @_;
+
+    $c->stash->{user_name} = $user->full_name;
+    $c->stash->{no_wrapper} = 1;
+    $c->stash->{template} = 'modules/users/email_reregister.tt';
+    $c->forward($c->view('AppKitTT'));
+    my $email_body = $c->res->body;
+
+    ## TT view tends to leave a bunch of newlines
+    $email_body =~ s/(?:^\s*$)+//m;
+
+    $c->log->debug($email_body);
+
+    $c->stash->{email} = {
+        to => $user->username,
+        from => $c->config->{system_email_address},
+        subject => "Code4Health User Registration",
+        body => $email_body,
+    };
+
+    $c->forward($c->view('Email'));
 }
 
 # Note that this is a GET request that changes things. This felt bad but the
@@ -221,7 +263,7 @@ sub profile
 
     $form
         ->get_field('current_pass')
-        ->constraint({ 
+        ->constraint({
             type => 'Callback',
             callback => sub { !$_[0] || $c->user->check_password($_[0]) },
             message => "Invalid password",
@@ -229,7 +271,7 @@ sub profile
 
     my $required_with_other = sub {
         my ($params, $self) = @_;
-        
+
         return $params->{'registrant_category'} eq 'other'
     };
 
@@ -252,10 +294,10 @@ sub profile
     $form->process;
 
     my $defaults = $self->_object_defaults($user);
-    $self->add_prefs_defaults($c, { 
+    $self->add_prefs_defaults($c, {
         defaults => $defaults,
         object => $user,
-    }); 
+    });
     $form->default_values($defaults);
 
     if($form->submitted_and_valid) {
@@ -276,7 +318,7 @@ sub profile
         return $c->res->redirect($c->req->uri);
     }
 
-    $c->stash->{secondary_organisations} = [ 
+    $c->stash->{secondary_organisations} = [
         $c->user
             ->secondary_organisations
             ->search({}, { order_by => \"REPLACE(name, ',', '')" })
@@ -313,11 +355,23 @@ sub _object_defaults {
 
 =head1 NAME
 
-Code4Health::AppKitX::Users::Controller:Users - 
+Code4Health::AppKitX::Users::Controller:Users -
 
 =head1 DESCRIPTION
 
 =head1 METHODS
+
+=head2 register
+
+Attempts to register a new user.
+
+If, when the form is posted, the email address already exists in the database,
+it will do one of two things. If the password was correct, the user is logged in
+with a message to say to check their profile is correct (the data in the form
+may differ). If the password was incorrect, an email is sent to the user asking
+them if they need a password reset.
+
+In all cases the outcome on the page will be apparent success.
 
 =head1 BUGS
 
