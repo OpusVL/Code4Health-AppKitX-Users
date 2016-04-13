@@ -53,6 +53,11 @@ has_field primary_organisation_other => (
     label => 'Other Organisation Name',
 );
 
+has_field show_membership => (
+    type    => 'Checkbox',
+    label   => 'Show my membership in community pages'
+);
+
 has_field registrant_category => (
     type => 'Select',
     widget => 'RadioGroup',
@@ -123,18 +128,24 @@ has_block account_details => (
     label => "Account details",
     render_list => [qw/
         email_address password confirm_password
-        title first_name surname primary_organisation primary_organisation_other 
+        title first_name surname primary_organisation primary_organisation_other
     /]
 );
 
 has_block about_you => (
     tag => 'fieldset',
     label => "About you",
-    render_list => [ qw/registrant_category registrant_category_other email_preferences submit/ ],
+    render_list => [ qw/registrant_category registrant_category_other email_preferences/ ],
+);
+
+has_block community_membership => (
+    tag => 'fieldset',
+    label => 'Community Membership',
+    render_list => [ qw/show_membership submit/ ],
 );
 
 sub build_render_list {
-    [qw/account_details about_you/]
+    [qw/account_details about_you community_membership/]
 };
 
 

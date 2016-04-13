@@ -301,7 +301,9 @@ sub profile
     $form->default_values($defaults);
 
     if($form->submitted_and_valid) {
+        my $show_member = $form->param_value('show_membership') ? 1 : 0;
         $user->update({
+            show_membership => $show_member,
             email_address => $form->param_value('email_address'),
             title => $form->param_value('title'),
             first_name => $form->param_value('first_name'),
@@ -343,6 +345,7 @@ sub _object_defaults {
     my ($self, $object) = @_;
 
     return {
+        show_membership => [ $object->show_membership ? 'true' : () ],
         email_address => $object->email_address,
         title => $object->title,
         first_name => $object->first_name,

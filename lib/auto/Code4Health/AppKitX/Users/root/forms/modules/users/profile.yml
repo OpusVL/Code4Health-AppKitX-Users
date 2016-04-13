@@ -29,6 +29,11 @@ elements:
           name: surname
           label: Surname
 
+        - type: Checkboxgroup
+          name: show_membership
+          options:
+            - [ "true", "Show my membership in community pages" ]
+
         - type: Radiogroup
           name: registrant_category
           label: "I am (select a single option that describes you)"
