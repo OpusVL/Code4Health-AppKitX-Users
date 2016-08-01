@@ -115,7 +115,9 @@ has_field email_preferences => (
                 on interest to members from Code4Health Supporters",
             value => 'supporters'
         },
-    ]
+    ],
+    # client is aware of the ICO guidelines
+    default => [ qw/members communities/ ],
 );
 
 has_field submit => (
