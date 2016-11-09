@@ -120,6 +120,10 @@ has_field email_preferences => (
     default => [ qw/members communities/ ],
 );
 
+has_field captcha => (
+    type => 'noCAPTCHA'
+);
+
 has_field submit => (
     type => 'Submit',
     value => 'Register',
@@ -143,13 +147,12 @@ has_block about_you => (
 has_block community_membership => (
     tag => 'fieldset',
     label => 'Community Membership',
-    render_list => [ qw/show_membership submit/ ],
+    render_list => [ qw/show_membership captcha submit/ ],
 );
 
 sub build_render_list {
     [qw/account_details about_you community_membership/]
 };
-
 
 sub html_attributes {
     my ( $self, $obj, $type, $attrs, $result ) = @_;
@@ -200,7 +203,6 @@ sub validate {
         $other->add_error("Please enter a short description")
             if not $other->value;
     }
-
 }
 
 1;

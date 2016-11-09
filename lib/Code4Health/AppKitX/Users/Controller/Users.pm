@@ -36,6 +36,7 @@ with 'OpusVL::AppKitX::PreferencesAdmin::Role::ObjectPreferences';
 
 sub _build_registration_form {
     my $form = Code4Health::AppKitX::Users::Form::RegistrationForm->new(
+        ctx => $_[0],
         name => "registration_form",
         field_list => [
             submit => {
@@ -69,6 +70,7 @@ sub register
     if ($form->process(ctx => $c, params => $params)) {
         delete $params->{confirm_password};
         delete $params->{primary_organisation};
+        delete $params->{'g-recaptcha-response'};
         # Avoid providing the empty string instead of null
         $params->{primary_organisation_id} ||= undef;
         $params->{primary_organisation_other} ||= undef;
