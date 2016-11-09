@@ -6,7 +6,7 @@ use namespace::autoclean;
 
 with 'OpusVL::AppKit::RolesFor::Plugin';
 
-our $VERSION = '0.09';
+our $VERSION = '0.11';
 
 after 'setup_components' => sub {
     my $class = shift;
@@ -38,9 +38,7 @@ after 'setup_components' => sub {
 
 1;
 
-=head1 NAME
-
-Code4Health::AppKitX::Users - 
+# ABSTRACT: front-end behaviour for C4H website
 
 =head1 DESCRIPTION
 
