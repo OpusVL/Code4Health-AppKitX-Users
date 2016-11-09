@@ -1,0 +1,8 @@
+Changes for Code4Health-AppKitX-Users
+
+{{$NEXT}}
+
+0.10      2016-11-09 15:40:57+00:00 Europe/London
+
+    - converted to dzil
+    - added noCAPTCHA to registration form
